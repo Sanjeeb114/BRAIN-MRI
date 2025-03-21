@@ -2,34 +2,29 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
 from PIL import Image
 
 # Load the trained model
-model = load_model("best_model.h5")  # Ensure this file is uploaded
+model = load_model("/content/best_model.h5")
 
-# Class labels (Update these based on your classes)
-class_labels = ["glioma", "meningioma", "notumor", "pituitary"]  # Modify as per your model
+# Define class names (modify based on your model)
+class_names = ["glioma", "meningioma", "notumor", "pituitary"]
 
-# Streamlit UI
-st.title("MRI Image Classification")
-st.write("Upload an MRI image to classify")
+st.title("MRI Image Analysis")
 
-# Upload image
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
+uploaded_file = st.file_uploader("Upload an MRI Image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Image", use_column_width=True)
-    
+
     # Preprocess the image
-    img = image.resize((900, 900))  # Adjust based on your model input size
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+    image = image.resize((224, 224))  # Adjust size based on your model input
+    image = np.array(image) / 255.0  # Normalize
+    image = np.expand_dims(image, axis=0)  # Add batch dimension
 
     # Make prediction
-    predictions = model.predict(img_array)
-    predicted_class = np.argmax(predictions, axis=1)[0]
+    prediction = model.predict(image)
+    predicted_class = np.argmax(prediction)
 
-    # Show result
-    st.write(f"Prediction: **{class_labels[predicted_class]}**")
+    st.write(f"Prediction: **{class_names[predicted_class]}**")
