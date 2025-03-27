@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 
 # Load the trained model
-model = load_model("/content/best_model.h5")
+model = load_model("best_model.h5")
 
 # Define class names (modify based on your model)
 class_names = ["glioma", "meningioma", "notumor", "pituitary"]
