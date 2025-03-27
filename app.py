@@ -19,7 +19,7 @@ if uploaded_file is not None:
     st.image(image, caption="Uploaded Image", use_container_width=True)  # ✅ Fixed
 
     # Preprocess the image
-    image = image.resize((224, 224))  # Adjust size based on your model input
+    image = image.resize((168, 168))  # Adjust size based on your model input
     image = np.array(image) / 255.0  # Normalize
     image = np.expand_dims(image, axis=0)  # Add batch dimension
 
